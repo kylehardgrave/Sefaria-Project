@@ -262,16 +262,16 @@ def segment_history(request, ref, lang, version):
 		ref = nref
 
 	version = version.replace("_", " ")
-	history = text_history(ref, version, lang)
+	histories = text_history(ref, version, lang)
 
-	for i in range(len(history)):
-		uid = history[i]["user"]
+	for history in histories:
+		uid = history["user"]
 		if isinstance(uid, Number):
 			user = User.objects.get(id=uid)
-			history[i]["firstname"] = user.first_name
+			history["firstname"] = user.first_name
 		else:
 			# For reversions before history where user is 'Unknown'
-			history[i]["firstname"] = uid
+			history["firstname"] = uid
 
 	url = "%s/%s/%s" % (url_ref(ref), lang, version.replace(" ", "_"))	
 	email = request.user.email if request.user.is_authenticated() else False
